@@ -1,26 +1,1049 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   أثر — tokens
+   Palette sampled from public/logo.jpeg (lapis #1C37A8) and extended with
+   faience turquoise + gold, the pigment pair on Egyptian glazed ware.
+   ========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* base */
+  --lapis: #1c37a8;
+  --lapis-deep: #0e1f63;
+  --lapis-dark: #091640;
+  --lapis-soft: #e4e8f8;
+  --faience: #16706b;
+  --faience-soft: #e0efee;
+  --gold: #8a6a16;
+  --gold-soft: #f7f0da;
+  --ink: #12162b;
+  --ink-2: #454a63;
+  --ink-3: #6b7089;
+  --paper: #eef0f6;
+  --paper-2: #f7f8fc;
+  --white: #fff;
+  --rule: #d3d8e8;
+  --rule-strong: #b4bcd4;
+
+  /* type */
+  --display: var(--font-display), "Reem Kufi", system-ui, sans-serif;
+  --body: var(--font-body), "IBM Plex Sans Arabic", system-ui, sans-serif;
+
+  /* scale — 1.25 modular, with a deliberate jump to the hero */
+  --t-xs: 0.75rem;
+  --t-sm: 0.8125rem;
+  --t-base: 0.9375rem;
+  --t-md: 1.0625rem;
+  --t-lg: 1.3125rem;
+  --t-xl: 1.625rem;
+  --t-2xl: 2.125rem;
+  --t-3xl: 2.75rem;
+  --t-4xl: 3.75rem;
+
+  --measure: 34rem;
+  --page: 74rem;
+  --rhythm: clamp(3.5rem, 7vw, 6rem);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--body);
+  --color-background: var(--white);
+  --color-foreground: var(--ink);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ==========================================================================
+   base
+   ========================================================================== */
+
+html {
+  font-family: var(--body);
+  color: var(--ink);
+  background: var(--white);
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-size: var(--t-base);
+  line-height: 1.7;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+/* body is `flex-col` (layout.tsx). Flex items default to min-width: auto, so a
+   wide descendant (rank table, numeral wall) inflates the whole page. In RTL
+   that extra width hangs off the inline-end and reads as a white gutter. */
+body > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Arabic numerals stay LTR inside RTL prose, and align in columns */
+.num {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+:where(a) {
+  color: var(--lapis);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+}
+
+:where(a:hover) {
+  color: var(--lapis-deep);
+}
+
+:where(:focus-visible) {
+  outline: 2px solid var(--lapis);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* on the dark hero field, focus needs the inverse */
+:where(.field-deep :focus-visible) {
+  outline-color: #b9c4f2;
+}
+
+.skip {
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  z-index: 50;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  background: var(--white);
+  color: var(--lapis-deep);
+  font-weight: 600;
+}
+
+.skip:focus {
+  width: auto;
+  height: auto;
+  padding: 0.6rem 1rem;
+  clip-path: none;
+  overflow: visible;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.wrap {
+  box-sizing: border-box;
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+  min-width: 0;
+}
+
+/* Only the data-page masthead is a flex item of body. Width auto + margin:auto
+   there shrinks to the logo+nav; 100% stretches it to the same edges as the
+   title. Nested wraps stay `width: auto` so padding cannot inflate the page. */
+body > .wrap {
+  width: 100%;
+}
+
+/* ==========================================================================
+   site chrome
+   ========================================================================== */
+
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  padding-block: 1rem;
+}
+
+.field-deep .masthead {
+  border-bottom: 1px solid rgb(255 255 255 / 0.14);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 3px;
+  display: block;
+}
+
+.brand-name {
+  font-family: var(--display);
+  font-size: var(--t-lg);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+.brand-sub {
+  display: block;
+  font-family: var(--body);
+  font-size: var(--t-xs);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  opacity: 0.72;
+  margin-top: 0.2rem;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: var(--t-sm);
+}
+
+.nav a {
+  color: inherit;
+  text-decoration: none;
+  padding-block: 0.3rem;
+  border-bottom: 2px solid transparent;
+}
+
+.nav a:hover {
+  border-bottom-color: currentColor;
+}
+
+.nav a[aria-current="page"] {
+  border-bottom-color: currentColor;
+  font-weight: 600;
+}
+
+.field-deep {
+  background: var(--lapis-deep);
+  color: #eaeefb;
+}
+
+.foot {
+  border-top: 1px solid var(--rule);
+  margin-top: var(--rhythm);
+  padding-block: 2rem 3rem;
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+}
+
+.foot-grid {
+  display: grid;
+  gap: 1.5rem 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+}
+
+.foot h2 {
+  font-family: var(--body);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.5rem;
+}
+
+.foot p,
+.foot ul {
+  margin: 0;
+}
+
+.foot ul {
+  list-style: none;
+  padding: 0;
+}
+
+.foot li + li {
+  margin-top: 0.35rem;
+}
+
+/* ==========================================================================
+   hero — the numeral wall
+   Each governorate total is typeset at a size proportional to sqrt(value),
+   floored at 28px so the smallest is still comfortably readable.
+   ========================================================================== */
+
+.hero {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(3rem, 7vw, 5.5rem);
+}
+
+.hero-lede {
+  max-width: 30rem;
+  margin: 0 0 clamp(2rem, 5vw, 3.25rem);
+  font-family: var(--display);
+  font-size: var(--t-2xl);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0.005em;
+}
+
+.wall {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: clamp(0.5rem, 1.6vw, 1.25rem) clamp(1rem, 3vw, 2.25rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.wall-item {
+  margin: 0;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.wall-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  padding: 0.15rem 0.2rem;
+  border-radius: 3px;
+}
+
+.wall-num {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  font-size: var(--size);
+  transition: font-size 760ms cubic-bezier(0.16, 0.84, 0.3, 1);
+}
+
+/* page-load moment: all eleven start equal, then resize to true proportion */
+.wall[data-state="flat"] .wall-num {
+  font-size: 3rem;
+}
+
+.wall-name {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--body);
+  font-size: var(--t-sm);
+  font-weight: 400;
+  color: #b9c4f2;
+  white-space: nowrap;
+}
+
+.wall-link:hover .wall-name,
+.wall-link:focus-visible .wall-name {
+  color: var(--white);
+}
+
+.wall-item--rest .wall-num {
+  color: #9fadea;
+}
+
+.hero-caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+  align-items: baseline;
+  margin-top: clamp(2.25rem, 5vw, 3.25rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(255 255 255 / 0.18);
+  font-size: var(--t-sm);
+  color: #c3cbee;
+  max-width: 52rem;
+}
+
+.hero-caption b {
+  color: var(--white);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wall-num {
+    transition: none;
+  }
+
+  .wall[data-state="flat"] .wall-num {
+    font-size: var(--size);
+  }
+}
+
+/* ==========================================================================
+   page one — prose sections
+   ========================================================================== */
+
+.band {
+  padding-block: var(--rhythm);
+}
+
+.band--tint {
+  background: var(--paper-2);
+  border-block: 1px solid var(--rule);
+}
+
+.band-head {
+  max-width: var(--measure);
+  margin: 0 0 2rem;
+}
+
+.band-head h2 {
+  font-family: var(--display);
+  font-size: var(--t-xl);
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 0.75rem;
+}
+
+.band-head p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--t-md);
+}
+
+.measure {
+  max-width: var(--measure);
+}
+
+.measure p {
+  margin: 0 0 1.1rem;
+}
+
+.measure p:last-child {
+  margin-bottom: 0;
+}
+
+/* thesis — one paragraph carrying the argument, set larger */
+.thesis {
+  max-width: 40rem;
+  font-size: var(--t-lg);
+  line-height: 1.65;
+  margin: 0;
+  color: var(--ink);
+}
+
+.thesis strong {
+  font-weight: 600;
+  box-shadow: inset 0 -0.42em 0 var(--lapis-soft);
+}
+
+/* what you'll find — three plain blocks, no cards, no numbering
+   (the content is not a sequence) */
+.explain {
+  display: grid;
+  gap: 2.5rem 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+}
+
+.explain section {
+  border-top: 2px solid var(--ink);
+  padding-top: 1rem;
+}
+
+.explain h3 {
+  font-family: var(--display);
+  font-size: var(--t-md);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.explain p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--t-base);
+}
+
+.explain--faience section {
+  border-top-color: var(--faience);
+}
+
+/* video slot — placeholder until the film lands */
+.video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--lapis-deep);
+  color: #dbe2f8;
+  border-radius: 4px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.video::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.video p {
+  margin: 0.5rem 0 0;
+  font-size: var(--t-sm);
+  color: #a8b4e4;
+}
+
+.video-title {
+  font-family: var(--display);
+  font-size: var(--t-lg);
+  font-weight: 500;
+  margin: 0;
+}
+
+.video-figure {
+  margin: 0;
+}
+
+.video-figure figcaption {
+  margin-top: 0.75rem;
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+}
+
+/* ranking table — governorate totals, a real sequence so it is numbered.
+   `table-layout: fixed` + <colgroup> pins every header directly over its own
+   column; the row rule is drawn once on the <tr> so it lands at a single y
+   across the whole row instead of once per cell. */
+.rank-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.rank {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: var(--t-base);
+}
+
+.rank caption {
+  text-align: start;
+  color: var(--ink-3);
+  font-size: var(--t-sm);
+  padding-bottom: 0.75rem;
+}
+
+.rank th,
+.rank td {
+  text-align: start;
+  padding: 0.7rem 0.75rem;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+  border: 0;
+}
+
+.rank thead tr {
+  border-bottom: 1.5px solid var(--rule-strong);
+}
+
+.rank tbody tr {
+  border-bottom: 1px solid var(--rule);
+}
+
+.rank tbody tr:last-child {
+  border-bottom: 0;
+}
+
+.rank thead th {
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.rank tbody tr:hover {
+  background: var(--paper-2);
+}
+
+.rank-i {
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.rank-gov {
+  font-weight: 600;
+}
+
+.rank-gov small {
+  display: block;
+  font-weight: 400;
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  letter-spacing: 0.02em;
+}
+
+.rank-val {
+  font-variant-numeric: tabular-nums;
+}
+
+/* proportional bar drawn in the row itself */
+.rank-bar span {
+  display: block;
+  height: 8px;
+  background: var(--lapis);
+  border-radius: 1px;
+  width: var(--w);
+}
+
+/* call to action */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--lapis);
+  color: var(--white);
+  font-family: var(--body);
+  font-size: var(--t-md);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 3px;
+  border: 1px solid var(--lapis);
+}
+
+.cta:hover {
+  background: var(--lapis-deep);
+  border-color: var(--lapis-deep);
+  color: var(--white);
+}
+
+.cta--ghost {
+  background: transparent;
+  color: var(--lapis);
+}
+
+.cta--ghost:hover {
+  background: var(--lapis-soft);
+  color: var(--lapis-deep);
+  border-color: var(--lapis-deep);
+}
+
+/* source note */
+.note {
+  border-inline-start: 3px solid var(--gold);
+  background: var(--gold-soft);
+  padding: 1rem 1.25rem;
+  font-size: var(--t-sm);
+  color: #5c4a12;
+  max-width: 44rem;
+  border-radius: 0 3px 3px 0;
+}
+
+.note p {
+  margin: 0 0 0.6rem;
+}
+
+.note p:last-child {
+  margin-bottom: 0;
+}
+
+.note strong {
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   page two — filters + table
+   The data page's own <h1> carries the page title, so the masthead here is the
+   same height and treatment as on the landing page: only the field colour
+   differs, and that comes from `.field-deep` on the landing hero.
+   ========================================================================== */
+
+.data-head {
+  padding-block: 2rem 1.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.data-head h1 {
+  font-family: var(--display);
+  font-size: var(--t-2xl);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  line-height: 1.25;
+}
+
+.data-head p {
+  margin: 0;
+  color: var(--ink-2);
+  max-width: 46rem;
+}
+
+.data-layout {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  grid-template-columns: 15.5rem minmax(0, 1fr);
+  align-items: start;
+  padding-block: 2rem 4rem;
+}
+
+.data-layout > * {
+  min-width: 0;
+}
+
+@media (max-width: 60rem) {
+  .data-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* filter rail */
+.rail {
+  position: sticky;
+  top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (max-width: 60rem) {
+  .rail {
+    position: static;
+  }
+}
+
+.rail-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.rail-group legend,
+.rail-label {
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--ink-2);
+  padding: 0;
+  margin-bottom: 0.6rem;
+  display: block;
+}
+
+.search {
+  display: block;
+  width: 100%;
+  font-family: var(--body);
+  font-size: var(--t-base);
+  padding: 0.6rem 0.75rem;
+  border: 1.5px solid var(--rule-strong);
+  border-radius: 3px;
+  background: var(--white);
+  color: var(--ink);
+}
+
+.search:focus {
+  border-color: var(--lapis);
+  outline: 2px solid var(--lapis-soft);
+  outline-offset: 0;
+}
+
+.select {
+  display: block;
+  width: 100%;
+  font-family: var(--body);
+  font-size: var(--t-base);
+  padding: 0.55rem 0.7rem;
+  border: 1.5px solid var(--rule-strong);
+  border-radius: 3px;
+  background: var(--white);
+  color: var(--ink);
+}
+
+.select:focus {
+  border-color: var(--lapis);
+}
+
+/* chip list for governorates / programs */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip {
+  font-family: var(--body);
+  font-size: var(--t-xs);
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink-2);
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.chip:hover {
+  border-color: var(--lapis);
+  color: var(--lapis);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--lapis);
+  border-color: var(--lapis);
+  color: var(--white);
+  font-weight: 500;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.check input {
+  margin: 0.25rem 0 0;
+  accent-color: var(--lapis);
+  flex: none;
+}
+
+.rail-reset {
+  font-family: var(--body);
+  font-size: var(--t-sm);
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--lapis);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  align-self: flex-start;
+}
+
+.rail-reset:hover {
+  color: var(--lapis-deep);
+}
+
+.rail-reset[disabled] {
+  color: var(--ink-3);
+  cursor: default;
+  text-decoration: none;
+}
+
+/* results bar */
+.results-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.results-count {
+  font-size: var(--t-md);
+  margin: 0;
+}
+
+.results-count b {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.results-count span {
+  color: var(--ink-3);
+  font-size: var(--t-sm);
+}
+
+/* the data table
+   Do not name this `.grid` — Tailwind's utility of that name sets
+   `display: grid` and the thead then shrinks to the label text (~420px)
+   while the body still stretches. Real table + fixed layout + equal
+   columns keeps every header over its cells across the full frame. */
+.table-frame {
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.data-table {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: var(--t-sm);
+}
+
+.data-table thead,
+.data-table tbody,
+.data-table tr {
+  width: 100%;
+}
+
+.data-table th,
+.data-table td {
+  width: 20%;
+  text-align: start;
+  padding: 0.65rem 0.85rem;
+  vertical-align: top;
+  overflow-wrap: break-word;
+  border-bottom: 1px solid var(--rule);
+}
+
+.data-table thead th {
+  background: var(--paper);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--ink);
+  border-bottom: 1.5px solid var(--rule-strong);
+}
+
+.data-table tbody tr:hover td {
+  background: var(--paper-2);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* sortable header buttons */
+.sortbtn {
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.sortbtn:hover {
+  color: var(--lapis);
+}
+
+.sortbtn i {
+  font-style: normal;
+  font-size: 0.7em;
+  color: var(--ink-3);
+}
+
+.sortbtn[data-active="true"] {
+  color: var(--lapis);
+}
+
+.sortbtn[data-active="true"] i {
+  color: var(--lapis);
+}
+
+/* cells */
+.c-gov {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+
+.c-sector {
+  color: var(--ink-2);
+}
+
+.c-indicator small {
+  display: block;
+  color: var(--ink-3);
+  font-size: var(--t-xs);
+  margin-top: 0.2rem;
+}
+
+.c-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.c-value em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--ink-2);
+  margin-inline-start: 0.3rem;
+  font-size: var(--t-xs);
+}
+
+/* money rows read lapis, physical outputs read faience */
+.c-value[data-kind="money"] {
+  color: var(--lapis);
+}
+
+.c-value[data-kind="count"],
+.c-value[data-kind="length"] {
+  color: var(--faience);
+}
+
+/* the single job gold does: this row was flagged for review by the compilers */
+.flag {
+  display: inline-block;
+  font-size: var(--t-xs);
+  color: var(--gold);
+  border-bottom: 1.5px solid var(--gold);
+  white-space: nowrap;
+}
+
+.empty {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--ink-2);
+}
+
+.empty p {
+  margin: 0 0 1rem;
+}
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-top: 1.25rem;
+}
+
+.pager-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pgbtn {
+  font-family: var(--body);
+  font-size: var(--t-sm);
+  padding: 0.45rem 0.9rem;
+  border: 1.5px solid var(--rule-strong);
+  border-radius: 3px;
+  background: var(--white);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.pgbtn:hover:not([disabled]) {
+  border-color: var(--lapis);
+  color: var(--lapis);
+}
+
+.pgbtn[disabled] {
+  color: var(--ink-3);
+  cursor: default;
+  background: var(--paper-2);
+}
+
+.pager-at {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
 }
