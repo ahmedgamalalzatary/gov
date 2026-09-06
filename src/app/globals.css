@@ -26,8 +26,8 @@
   --rule-strong: #b4bcd4;
 
   /* type */
-  --display: var(--font-display), "Reem Kufi", system-ui, sans-serif;
-  --body: var(--font-body), "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --display: var(--font-cairo), "Cairo", system-ui, sans-serif;
+  --body: var(--font-cairo), "Cairo", system-ui, sans-serif;
 
   /* scale — 1.25 modular, with a deliberate jump to the hero */
   --t-xs: 0.75rem;
@@ -1047,3 +1047,179 @@ body > .wrap {
   color: var(--ink-2);
   font-variant-numeric: tabular-nums;
 }
+
+/* filters — dropdowns instead of chips */
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  margin-bottom: 1.5rem;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.filter-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 10rem;
+}
+
+.filter-label > span {
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.filter-select {
+  font-family: var(--body);
+  font-size: var(--t-sm);
+  padding: 0.55rem 0.7rem;
+  border: 1.5px solid var(--rule-strong);
+  border-radius: 3px;
+  background: var(--white);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.filter-select:focus {
+  border-color: var(--lapis);
+  outline: 2px solid var(--lapis-soft);
+  outline-offset: 0;
+}
+
+.reset-btn {
+  font-family: var(--body);
+  font-size: var(--t-sm);
+  padding: 0.55rem 1rem;
+  background: var(--lapis);
+  color: var(--white);
+  border: 1.5px solid var(--lapis);
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.reset-btn:hover {
+  background: var(--lapis-deep);
+  border-color: var(--lapis-deep);
+}
+
+/* tabs */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--rule);
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  font-family: var(--body);
+  font-size: var(--t-base);
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: var(--lapis);
+}
+
+.tab--active {
+  color: var(--lapis);
+  border-bottom-color: var(--lapis);
+  font-weight: 600;
+}
+
+/* charts grid */
+.charts-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr));
+}
+
+.chart-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 1.5rem;
+}
+
+.chart-card h3 {
+  font-family: var(--display);
+  font-size: var(--t-lg);
+  font-weight: 600;
+  margin: 0 0 1.25rem;
+  color: var(--ink);
+}
+
+/* Recharts assumes LTR box metrics. Keep titles RTL, isolate the plot. */
+.chart-plot {
+  direction: ltr;
+  width: 100%;
+}
+
+.chart-plot .recharts-cartesian-axis-tick-value {
+  font-family: var(--body);
+}
+
+.chart-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.35rem 1rem;
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+}
+
+.chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chart-legend-swatch {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 1px;
+  flex: none;
+}
+
+/* Recharts tooltip customization */
+.recharts-tooltip-wrapper {
+  direction: rtl;
+}
+
+.recharts-default-tooltip {
+  background: var(--white) !important;
+  border: 1px solid var(--rule-strong) !important;
+  border-radius: 3px !important;
+  padding: 0.75rem !important;
+  font-family: var(--body) !important;
+  font-size: var(--t-sm) !important;
+}
+
+.recharts-tooltip-label {
+  color: var(--ink) !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.25rem !important;
+}
+

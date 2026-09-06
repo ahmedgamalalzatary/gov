@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
-import { Reem_Kufi, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Cairo } from "next/font/google";
 import "./globals.css";
 
-// Kufic — the script carved into Egyptian monuments; motivated by the name أثر
-const display = Reem_Kufi({
-  variable: "--font-display",
+const cairo = Cairo({
+  variable: "--font-cairo",
   subsets: ["arabic", "latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-const body = IBM_Plex_Sans_Arabic({
-  variable: "--font-body",
-  subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "600", "700"],
   display: "swap",
 });
 
@@ -38,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="ar"
       dir="rtl"
-      className={`${display.variable} ${body.variable} h-full antialiased`}
+      className={`${cairo.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <a className="skip" href="#main">
