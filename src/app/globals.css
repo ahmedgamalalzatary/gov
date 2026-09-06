@@ -178,7 +178,6 @@ body > .wrap {
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
   text-decoration: none;
   color: inherit;
 }
@@ -188,24 +187,6 @@ body > .wrap {
   height: 38px;
   border-radius: 3px;
   display: block;
-}
-
-.brand-name {
-  font-family: var(--display);
-  font-size: var(--t-lg);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  line-height: 1;
-}
-
-.brand-sub {
-  display: block;
-  font-family: var(--body);
-  font-size: var(--t-xs);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  opacity: 0.72;
-  margin-top: 0.2rem;
 }
 
 .nav {
@@ -237,11 +218,11 @@ body > .wrap {
 }
 
 .foot {
-  border-top: 1px solid var(--rule);
+  background: var(--lapis-deep);
+  color: #eaeefb;
   margin-top: var(--rhythm);
-  padding-block: 2rem 3rem;
+  padding-block: 2.5rem 3.25rem;
   font-size: var(--t-sm);
-  color: var(--ink-2);
 }
 
 .foot-grid {
@@ -254,13 +235,14 @@ body > .wrap {
   font-family: var(--body);
   font-size: var(--t-sm);
   font-weight: 600;
-  color: var(--ink);
+  color: var(--white);
   margin: 0 0 0.5rem;
 }
 
 .foot p,
 .foot ul {
   margin: 0;
+  color: #c3cbee;
 }
 
 .foot ul {
@@ -270,6 +252,20 @@ body > .wrap {
 
 .foot li + li {
   margin-top: 0.35rem;
+}
+
+.foot a {
+  color: #eaeefb;
+  text-decoration-color: rgb(255 255 255 / 0.35);
+}
+
+.foot a:hover {
+  color: var(--white);
+  text-decoration-color: var(--white);
+}
+
+.foot :focus-visible {
+  outline-color: #b9c4f2;
 }
 
 /* ==========================================================================
@@ -440,34 +436,60 @@ body > .wrap {
   box-shadow: inset 0 -0.42em 0 var(--lapis-soft);
 }
 
-/* what you'll find — three plain blocks, no cards, no numbering
-   (the content is not a sequence) */
+/* what you'll find — three glazed tiles, one pigment each (not a sequence) */
 .explain {
   display: grid;
-  gap: 2.5rem 3rem;
+  gap: 1.25rem;
   grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
 }
 
-.explain section {
-  border-top: 2px solid var(--ink);
-  padding-top: 1rem;
+.explain article {
+  --tile: var(--lapis);
+  --tile-wash: var(--lapis-soft);
+  position: relative;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1.35rem 1.35rem 1.5rem;
+  overflow: hidden;
 }
 
-.explain h3 {
+.explain article::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 0.4rem;
+  background: var(--tile);
+}
+
+.explain article:nth-child(2) {
+  --tile: var(--faience);
+  --tile-wash: var(--faience-soft);
+}
+
+.explain article:nth-child(3) {
+  --tile: var(--gold);
+  --tile-wash: var(--gold-soft);
+}
+
+.explain article h3 {
   font-family: var(--display);
   font-size: var(--t-md);
   font-weight: 600;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.65rem;
+  padding: 0.15rem 0.55rem;
+  background: var(--tile-wash);
+  color: var(--ink);
+  display: inline-block;
+  border-radius: 2px;
 }
 
-.explain p {
+.explain article p {
   margin: 0;
   color: var(--ink-2);
   font-size: var(--t-base);
-}
-
-.explain--faience section {
-  border-top-color: var(--faience);
+  line-height: 1.7;
 }
 
 /* video slot — placeholder until the film lands */

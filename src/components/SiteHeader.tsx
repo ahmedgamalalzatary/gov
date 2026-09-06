@@ -9,16 +9,12 @@ export default function SiteHeader({ current }: { current: "home" | "data" }) {
         <Link href="/" className="brand">
           <Image
             src="/logo.jpeg"
-            alt=""
+            alt="أثر"
             width={38}
             height={38}
             className="brand-mark"
             priority
           />
-          <span className="brand-name">
-            أثر
-            <span className="brand-sub">أين تُنفَق أموال الدولة</span>
-          </span>
         </Link>
 
         <nav className="nav" aria-label="أقسام الموقع">
