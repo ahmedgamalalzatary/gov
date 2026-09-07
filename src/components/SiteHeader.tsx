@@ -8,7 +8,7 @@ export default function SiteHeader({ current }: { current: "home" | "data" }) {
       <div className="masthead">
         <Link href="/" className="brand">
           <Image
-            src="/logo.jpeg"
+            src="/logo.png"
             alt="أثر"
             width={38}
             height={38}

@@ -64,14 +64,15 @@ export default function Home() {
           </div>
 
           <figure className="video-figure">
-            <div className="video" role="img" aria-label="مكان الفيلم التعريفي — لم يُنشر بعد">
-              <p className="video-title">الفيلم قيد الإعداد</p>
-              <p>يُضاف هذا الفيلم إلى الصفحة عند اكتماله.</p>
+            <div className="video-container">
+              <iframe
+                src="https://www.youtube.com/embed/NHOwxtmtXn8"
+                title="الفيلم التعريفي"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="video-iframe"
+              />
             </div>
-            <figcaption>
-              حتى ذلك الحين، يمكنك الانتقال مباشرة إلى{" "}
-              <Link href="/data">جدول البيانات</Link>.
-            </figcaption>
           </figure>
         </div>
       </section>
