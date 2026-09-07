@@ -66,7 +66,7 @@ export default function Home() {
           <figure className="video-figure">
             <div className="video-container">
               <iframe
-                src="https://www.youtube.com/embed/NHOwxtmtXn8"
+                src="https://www.youtube.com/embed/NHOwxtmtXn8?rel=0"
                 title="الفيلم التعريفي"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
